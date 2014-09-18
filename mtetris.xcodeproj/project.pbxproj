@@ -7,13 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		66509C3C19C7A8A6001C8654 /* mtetris.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 66509C3B19C7A8A6001C8654 /* mtetris.1 */; };
 		66509C4619C7A953001C8654 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 66509C4419C7A953001C8654 /* main.c */; };
 		66509C4719C7A953001C8654 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 66509C4519C7A953001C8654 /* score.c */; };
-		66509C4919C7AE2D001C8654 /* libX11.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66509C4819C7AE2D001C8654 /* libX11.a */; };
-		66509C4D19C7AE63001C8654 /* libXext.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66509C4A19C7AE63001C8654 /* libXext.a */; };
-		66509C4E19C7AE63001C8654 /* libXm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66509C4B19C7AE63001C8654 /* libXm.a */; };
-		66509C4F19C7AE63001C8654 /* libXt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66509C4C19C7AE63001C8654 /* libXt.a */; };
+		66A44D2D19CB620F0095D514 /* libX11.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66A44D2919CB620F0095D514 /* libX11.a */; };
+		66A44D2E19CB620F0095D514 /* libXext.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66A44D2A19CB620F0095D514 /* libXext.a */; };
+		66A44D2F19CB620F0095D514 /* libXm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66A44D2B19CB620F0095D514 /* libXm.a */; };
+		66A44D3019CB620F0095D514 /* libXt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66A44D2C19CB620F0095D514 /* libXt.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,7 +22,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				66509C3C19C7A8A6001C8654 /* mtetris.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -31,13 +29,12 @@
 
 /* Begin PBXFileReference section */
 		66509C3619C7A8A6001C8654 /* mtetris */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mtetris; sourceTree = BUILT_PRODUCTS_DIR; };
-		66509C3B19C7A8A6001C8654 /* mtetris.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = mtetris.1; sourceTree = "<group>"; };
 		66509C4419C7A953001C8654 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
 		66509C4519C7A953001C8654 /* score.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = score.c; sourceTree = SOURCE_ROOT; };
-		66509C4819C7AE2D001C8654 /* libX11.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libX11.a; path = ../../../../../opt/local/lib/libX11.a; sourceTree = "<group>"; };
-		66509C4A19C7AE63001C8654 /* libXext.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXext.a; path = ../../../../../opt/local/lib/libXext.a; sourceTree = "<group>"; };
-		66509C4B19C7AE63001C8654 /* libXm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXm.a; path = ../../../../../opt/local/lib/libXm.a; sourceTree = "<group>"; };
-		66509C4C19C7AE63001C8654 /* libXt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXt.a; path = ../../../../../opt/local/lib/libXt.a; sourceTree = "<group>"; };
+		66A44D2919CB620F0095D514 /* libX11.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libX11.a; path = /opt/local/lib/libX11.a; sourceTree = "<absolute>"; };
+		66A44D2A19CB620F0095D514 /* libXext.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXext.a; path = /opt/local/lib/libXext.a; sourceTree = "<absolute>"; };
+		66A44D2B19CB620F0095D514 /* libXm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXm.a; path = /opt/local/lib/libXm.a; sourceTree = "<absolute>"; };
+		66A44D2C19CB620F0095D514 /* libXt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXt.a; path = /opt/local/lib/libXt.a; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,10 +42,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66509C4D19C7AE63001C8654 /* libXext.a in Frameworks */,
-				66509C4E19C7AE63001C8654 /* libXm.a in Frameworks */,
-				66509C4F19C7AE63001C8654 /* libXt.a in Frameworks */,
-				66509C4919C7AE2D001C8654 /* libX11.a in Frameworks */,
+				66A44D2D19CB620F0095D514 /* libX11.a in Frameworks */,
+				66A44D2E19CB620F0095D514 /* libXext.a in Frameworks */,
+				66A44D2F19CB620F0095D514 /* libXm.a in Frameworks */,
+				66A44D3019CB620F0095D514 /* libXt.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,11 +55,8 @@
 		66509C2D19C7A8A5001C8654 = {
 			isa = PBXGroup;
 			children = (
-				66509C4A19C7AE63001C8654 /* libXext.a */,
-				66509C4B19C7AE63001C8654 /* libXm.a */,
-				66509C4C19C7AE63001C8654 /* libXt.a */,
-				66509C4819C7AE2D001C8654 /* libX11.a */,
-				66509C3819C7A8A6001C8654 /* mtetris */,
+				66A44D2819CB61A30095D514 /* Libraries */,
+				66509C3819C7A8A6001C8654 /* Sources */,
 				66509C3719C7A8A6001C8654 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -75,14 +69,25 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		66509C3819C7A8A6001C8654 /* mtetris */ = {
+		66509C3819C7A8A6001C8654 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				66509C4419C7A953001C8654 /* main.c */,
 				66509C4519C7A953001C8654 /* score.c */,
-				66509C3B19C7A8A6001C8654 /* mtetris.1 */,
 			);
+			name = Sources;
 			path = mtetris;
+			sourceTree = "<group>";
+		};
+		66A44D2819CB61A30095D514 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				66A44D2919CB620F0095D514 /* libX11.a */,
+				66A44D2A19CB620F0095D514 /* libXext.a */,
+				66A44D2B19CB620F0095D514 /* libXm.a */,
+				66A44D2C19CB620F0095D514 /* libXt.a */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
