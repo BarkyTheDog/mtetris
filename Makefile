@@ -43,6 +43,7 @@ install: $(PROG)
 
 clean: 
 	rm -f *~ *.bak core *.o \#*\# $(PROG) $(DEBUG) lint_errs
+	rm -rf mtetris.dSYM
 
 depend:
 	$(DEPEND) $(INCS) $(SRCS)
