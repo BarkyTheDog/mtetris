@@ -120,7 +120,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0700;
-				ORGANIZATIONNAME = CodeFromAbove;
+				ORGANIZATIONNAME = "CodeFromAbove, LLC";
 				TargetAttributes = {
 					662E24F51BC09C5900AF7632 = {
 						CreatedOnToolsVersion = 7.0.1;
