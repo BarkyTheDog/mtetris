@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		662E25031BC09C9800AF7632 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 662E25011BC09C9800AF7632 /* score.c */; settings = {ASSET_TAGS = (); }; };
-		662E25061BC09CE900AF7632 /* libXext.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25051BC09CE900AF7632 /* libXext.a */; settings = {ASSET_TAGS = (); }; };
-		662E25081BC09CF300AF7632 /* libXm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25071BC09CF300AF7632 /* libXm.a */; settings = {ASSET_TAGS = (); }; };
-		662E250A1BC09CFD00AF7632 /* libXt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25091BC09CFD00AF7632 /* libXt.a */; settings = {ASSET_TAGS = (); }; };
-		662E250C1BC09D0700AF7632 /* libX11.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E250B1BC09D0700AF7632 /* libX11.a */; settings = {ASSET_TAGS = (); }; };
-		662E250E1BC09D4700AF7632 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 662E250D1BC09D4700AF7632 /* main.c */; settings = {ASSET_TAGS = (); }; };
+		662E25031BC09C9800AF7632 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 662E25011BC09C9800AF7632 /* score.c */; };
+		662E25061BC09CE900AF7632 /* libXext.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25051BC09CE900AF7632 /* libXext.a */; };
+		662E25081BC09CF300AF7632 /* libXm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25071BC09CF300AF7632 /* libXm.a */; };
+		662E250A1BC09CFD00AF7632 /* libXt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25091BC09CFD00AF7632 /* libXt.a */; };
+		662E250C1BC09D0700AF7632 /* libX11.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E250B1BC09D0700AF7632 /* libX11.a */; };
+		662E250E1BC09D4700AF7632 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 662E250D1BC09D4700AF7632 /* main.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -163,7 +163,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -206,7 +206,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
