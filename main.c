@@ -1481,7 +1481,7 @@ int main(int   argc,
     XPutImage(dpy, gameover, gcc, &goim,
               0, 0, 0, 0, gameover_width, RECTSIZE);
     XGetKeyboardControl(dpy, &kbstate);
-    ftid = reptid = tid = NULL;
+    ftid = reptid = tid = 0;
     rankfail = aboutd = rsc = sizepd  = NULL;
     pwidth  = INITWIDTH;
     pheight = INITHEIGHT;
@@ -1495,7 +1495,7 @@ int main(int   argc,
     sound = True;
     training = wpause = over = playing = False;
     mapsize = 0;
-    wipeffect = filler = NULL;
+    wipeffect = filler = 0;
     cpiece = -2;
     preinit = True;
     
@@ -1536,14 +1536,14 @@ static void init_tetris(void)
     time(&tbuf);
     srand((unsigned)tbuf);
     if (pmap == NULL) {
-        if (wipeffect != NULL) {
+        if (wipeffect != 0) {
             XFreePixmap(dpy, wipeffect);
         }
         wipeffect = XCreatePixmap(dpy, work,
                                   (unsigned int)(pwidth * RECTSIZE),
                                   (unsigned int)(pheight * RECTSIZE),
                                   DefaultDepth(dpy, 0));
-        if (filler != NULL) {
+        if (filler != 0) {
             XFreePixmap(dpy, filler);
         }
         filler = XCreatePixmap(dpy, work,
@@ -1633,7 +1633,7 @@ static void timer_proc(XtPointer     client_data,
         fall();
     } else {
         if (wpause || !(drop())) {
-            tid = NULL;
+            tid = 0;
         }
     }
     tid = XtAppAddTimeOut(appContext, interval, timer_proc, 0);
@@ -1673,7 +1673,7 @@ static void start_proc(void)
     drop();
     playing = True;
     over    = False;
-    if (tid == NULL) {
+    if (tid == 0) {
         tid = XtAppAddTimeOut(appContext, interval, timer_proc, 0);
     }
     if (kbstate.global_auto_repeat) {
@@ -2448,13 +2448,13 @@ static void fixed(void)
         }
     }
     if (l > 0) {
-        if (tid != NULL) {
+        if (tid != 0) {
             XtRemoveTimeOut(tid);
-            tid = NULL;
+            tid = 0;
         }
-        if (reptid != NULL) {
+        if (reptid != 0) {
             XtRemoveTimeOut(reptid);
-            reptid = NULL;
+            reptid = 0;
         }
         XtRemoveEventHandler(work_window,
                              ButtonPressMask | ButtonReleaseMask,
@@ -2540,7 +2540,7 @@ void wipe_proc(XtPointer     client_data,
     sline += p;
     score += p * 10 + (p * p * 2);
     upscore(LINEUP | SCOREUP);
-    if (tid == NULL) {
+    if (tid == 0) {
         tid = XtAppAddTimeOut(appContext, interval, timer_proc, 0);
     }
     XtAddEventHandler(work_window,
@@ -2620,7 +2620,7 @@ static void levelbtn_proc(Widget               w,
         drop();
         playing = True;
         over    = False;
-        if (tid == NULL) {
+        if (tid == 0) {
             tid = XtAppAddTimeOut(appContext, interval, timer_proc, 0);
         }
         if (kbstate.global_auto_repeat) {
@@ -3063,7 +3063,7 @@ static void resize_proc(Widget               w,
     
     if (tag) {
         if (pwidth != tmpwidth) {
-            if (filler != NULL) {
+            if (filler != 0) {
                 XFreePixmap(dpy, filler);
             }
             filler = XCreatePixmap(dpy, work, 
@@ -3076,7 +3076,7 @@ static void resize_proc(Widget               w,
             }
         }
         if (pwidth != tmpwidth || pheight != tmpheight) {
-            if (wipeffect != NULL) {
+            if (wipeffect != 0) {
                 XFreePixmap(dpy, wipeffect);
             }
             wipeffect = XCreatePixmap(dpy, work, 
@@ -3407,19 +3407,19 @@ static void Eventproc(Widget     w,
                     right();
                     break;
             }
-            if (kbid !=(char *) NULL) {
-                if (reptid != NULL) {
+            if (kbid != (char *) NULL) {
+                if (reptid != 0) {
                     XtRemoveTimeOut(reptid);
-                    reptid = NULL;
+                    reptid = 0;
                 }
                 reptid = XtAppAddTimeOut(appContext, REPEATSTART,
                                          repeat_proc, kbid);
             }
             break;
         case ButtonRelease:
-            if (reptid != NULL)    {
+            if (reptid != 0)    {
                 XtRemoveTimeOut(reptid);
-                reptid = NULL;
+                reptid = 0;
             }
             XDefineCursor (dpy, work, normal_cursor);
             break;
@@ -3456,9 +3456,9 @@ static void Eventproc(Widget     w,
                 case XK_space:
                     if (playing && !wpause) {
                         expfall();
-                        if (tid != NULL) {
+                        if (tid != 0) {
                             XtRemoveTimeOut(tid);
-                            tid = NULL;
+                            tid = 0;
                         }
                         timer_proc(NULL, NULL);
                     }
@@ -3485,17 +3485,17 @@ static void Eventproc(Widget     w,
                     kbid = NULL;
             }
             if (kbid != NULL) {
-                if (reptid != NULL) {
+                if (reptid != 0) {
                     XtRemoveTimeOut(reptid);
-                    reptid = NULL;
+                    reptid = 0;
                 }
                 reptid = XtAppAddTimeOut(appContext, REPEATSTART, repeat_proc, kbid);
             }
             break;
         case KeyRelease:
-            if (reptid != NULL)    {
+            if (reptid != 0)    {
                 XtRemoveTimeOut(reptid);
-                reptid = NULL;
+                reptid = 0;
             }
             break;
         default:
@@ -3512,9 +3512,9 @@ static void Eventproc2(Widget     w,
     switch (event->type) {
         case EnterNotify:
             if (playing) {
-                if (tid != NULL) {
+                if (tid != 0) {
                     XtRemoveTimeOut(tid);
-                    tid = NULL;
+                    tid = 0;
                 }
                 tid = XtAppAddTimeOut(appContext, interval, timer_proc, 0);
             }
@@ -3530,13 +3530,13 @@ static void Eventproc2(Widget     w,
                 XAutoRepeatOn(dpy);
             }
             if (playing) {
-                if (tid != NULL) {
+                if (tid != 0) {
                     XtRemoveTimeOut(tid);
-                    tid = NULL;
+                    tid = 0;
                 }
-                if (reptid != NULL) {
+                if (reptid != 0) {
                     XtRemoveTimeOut(reptid);
-                    reptid = NULL;
+                    reptid = 0;
                 }
             }
             XDefineCursor (dpy, work, normal_cursor);
@@ -3567,7 +3567,7 @@ void repeat_proc(XtPointer     client_data,
         reptid = XtAppAddTimeOut(appContext, REPEATINTERVAL,
                                  repeat_proc, kbid);
     } else {
-        reptid = NULL;
+        reptid = 0;
     }
 }
 
@@ -3634,13 +3634,13 @@ static void gameover_proc(void)
 {
     Arg args[1];
     
-    if (tid != NULL) {
+    if (tid != 0) {
         XtRemoveTimeOut(tid);
-        tid = NULL;
+        tid = 0;
     }
-    if (reptid != NULL) {
+    if (reptid != 0) {
         XtRemoveTimeOut(reptid);
-        reptid = NULL;
+        reptid = 0;
     }
     XtRemoveEventHandler(work_window, 
                          ButtonPressMask | ButtonReleaseMask, 
