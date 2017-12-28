@@ -6,6 +6,7 @@
 #include <sys/file.h>
 /*#include <malloc.h>*/
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "score.h"
 
@@ -40,8 +41,6 @@ int scorefile(char *name,
     retry = 0;
     savmask = umask((mode_t)011);
     while ((sfp = open(fname, O_RDWR | O_CREAT ,  0777)) == -1)    {
-        extern unsigned sleep();
-        
         sleep(1);
         if (retry++ > 10)
             return FALSE;
@@ -51,7 +50,7 @@ int scorefile(char *name,
 #endif
     umask((mode_t)savmask);
     
-    if ((readcnt = read(sfp, &fstrec, sizeof(struct score_rec))) == NULL) {
+    if ((readcnt = read(sfp, &fstrec, sizeof(struct score_rec))) == 0) {
         /* New File was created */
         initrec.level = 0;
         initrec.score = 1;
