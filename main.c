@@ -449,7 +449,7 @@ long             interval, initinterval, setupinterval;
 int              cpiece, npiece, crtopy, mapsize, nmember;
 int              crx, cry, pwidth, pheight, crdir;
 Dimension        width, height, tmpwidth, tmpheight;
-signed char     *pmap, *savepmap;
+char            *pmap, *savepmap;
 int              cx[MAXP], cy[MAXP];
 XtIntervalId     tid, reptid, ftid;
 
@@ -606,7 +606,9 @@ static void dispscore(struct score_rec     *allrec,
 
 static void hidescore_proc(void);
 
-static void hidemore_proc(void);
+static void hidemore_proc(Widget    w,
+                          XtPointer closure,
+                          XtPointer call_data);
 
 static void timer_proc(XtPointer     client_data,
                        XtIntervalId *id);
@@ -657,7 +659,11 @@ static int    drop(void);
 int scorefile(char   *name,
               int     score,
               int     level,
-              void    (*dispproc)());
+              void    (*dispproc)(struct score_rec *allrec,
+                                  int               cnt,
+                                  int               rank,
+                                  char              upped,
+                                  char              first));
 
 
 int main(int   argc,
@@ -748,7 +754,7 @@ int main(int   argc,
     cb_about[0].closure = (char *)0;
     XtSetArg(args[n], XmNactivateCallback, cb_about);       n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("About..." , "ISO8859-1")); n++;
+             XmStringLtoRCreate("About...", "ISO8859-1"));  n++;
     XtManageChild(aboutbtn =
                   XmCreatePushButtonGadget(fpull_down, "about", args, n));
     
@@ -756,16 +762,16 @@ int main(int   argc,
     cb_about[0].closure = (char *)1;
     XtSetArg(args[n], XmNactivateCallback, cb_about);            n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("More About..." , "ISO8859-1")); n++;
+             XmStringLtoRCreate("More About...", "ISO8859-1"));  n++;
     XtManageChild(moreabout =
                   XmCreatePushButtonGadget(fpull_down, "Moreabout", args, n));
     
     n = 0;
     XtSetArg(args[n], XmNactivateCallback, cb_quit);       n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Quit" , "ISO8859-1"));    n++;
+             XmStringLtoRCreate("Quit", "ISO8859-1"));     n++;
     XtSetArg(args[n], XmNacceleratorText,
-             XmStringLtoRCreate("Ctrl/Q" , "ISO8859-1"));  n++;
+             XmStringLtoRCreate("Ctrl/Q", "ISO8859-1"));   n++;
     XtSetArg(args[n], XmNaccelerator, "Ctrl<KeyPress>q:"); n++;
     XtManageChild(quitbtn =
                   XmCreatePushButtonGadget(fpull_down, "Quit", args, n));
@@ -784,9 +790,9 @@ int main(int   argc,
     n = 0;
     XtSetArg(args[n], XmNactivateCallback, cb_start);         n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Start Game" , "ISO8859-1")); n++;
+             XmStringLtoRCreate("Start Game", "ISO8859-1"));  n++;
     XtSetArg(args[n], XmNacceleratorText,
-             XmStringLtoRCreate("Ctrl/S" , "ISO8859-1"));     n++;
+             XmStringLtoRCreate("Ctrl/S", "ISO8859-1"));      n++;
     XtSetArg(args[n], XmNaccelerator, "Ctrl<KeyPress>s:");    n++;
     XtManageChild(startbtn = XmCreatePushButtonGadget(cpull_down,
                                                       "Start Game",
@@ -797,7 +803,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNvisibleWhenOff,       FALSE);    n++;
     XtSetArg(args[n], XmNvalue,                TRUE);     n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Sound" , "ISO8859-1"));  n++;
+             XmStringLtoRCreate("Sound", "ISO8859-1"));   n++;
     XtManageChild(soundbtn =
                   XmCreateToggleButtonGadget(cpull_down, "SoundSwitch",
                                              args, n));
@@ -805,7 +811,7 @@ int main(int   argc,
     n = 0;
     XtSetArg(args[n], XmNactivateCallback, cb_levelsetup);     n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Level Setup" , "ISO8859-1")); n++;
+             XmStringLtoRCreate("Level Setup",  "ISO8859-1")); n++;
     XtManageChild(lsetupbtn = XmCreatePushButtonGadget(cpull_down,
                                                        "LevelSetup",
                                                        args, n));
@@ -813,7 +819,7 @@ int main(int   argc,
     n = 0;
     XtSetArg(args[n], XmNactivateCallback, cb_size);           n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Change Size" , "ISO8859-1")); n++;
+             XmStringLtoRCreate("Change Size",  "ISO8859-1")); n++;
     XtManageChild(sizebtn = XmCreatePushButtonGadget(cpull_down,
                                                      "Change size", args, n));
     
@@ -833,7 +839,7 @@ int main(int   argc,
         if (i == 0) {
             XtSetArg(args[n], XmNset, TRUE); n++;
         }
-        cb_window[0].closure = (char *)i;
+        cb_window[0].closure = (XtPointer)(unsigned long)i;
         XtSetArg(args[n], XmNvalueChangedCallback, cb_window);      n++;
         XtSetArg(args[n], XmNvisibleWhenOff,       FALSE);          n++;
         XtSetArg(args[n], XmNvalue,                wdef[i]);        n++;
@@ -841,7 +847,7 @@ int main(int   argc,
                  XmStringLtoRCreate(wbtnlab[i], "ISO8859-1"));      n++;
         if (strlen(wbtnacl[i]) > 0) {
             XtSetArg(args[n], XmNacceleratorText,
-                     XmStringLtoRCreate(wbtnacl[i] , "ISO8859-1")); n++;
+                     XmStringLtoRCreate(wbtnacl[i], "ISO8859-1"));  n++;
             XtSetArg(args[n], XmNaccelerator, wbtnacc[i]);          n++;
         }
         XtManageChild(winbtn[i] = XmCreateToggleButtonGadget(wpull_down,
@@ -851,8 +857,8 @@ int main(int   argc,
     
     n = 0;
     XtSetArg(args[n], XmNsubMenuId, wpull_down); n++;
-    XtManageChild(wentry = XmCreateCascadeButton (menu_widget, "Windows",
-                                                  args, n));
+    XtManageChild(wentry = XmCreateCascadeButton(menu_widget, "Windows",
+                                                 args, n));
     
     owindow_font = XLoadQueryFont(dpy, OWFONT);
     if (owindow_font == NULL) {
@@ -900,7 +906,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNleftOffset,       50);                       n++;
     XtSetArg(args[n], XmNrightOffset,      10);                       n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("00000" , "ISO8859-1"));              n++;
+             XmStringLtoRCreate("00000", "ISO8859-1"));               n++;
     XtSetArg(args[n], XmNrecomputeSize,    FALSE);                    n++;
     XtManageChild(scv=XmCreateLabelGadget(scored, "scv", args,        n));
     
@@ -909,7 +915,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNtopWidget,        scl);             n++;
     XtSetArg(args[n], XmNleftAttachment,   XmATTACH_FORM);   n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Level:" , "ISO8859-1"));  n++;
+             XmStringLtoRCreate("Level:", "ISO8859-1"));     n++;
     XtManageChild(levl=XmCreateLabelGadget(scored, "levl", args, n));
     
     n = 0;
@@ -921,7 +927,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNleftOffset,       50);                       n++;
     XtSetArg(args[n], XmNrightOffset,      10);                       n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("00000" , "ISO8859-1"));              n++;
+             XmStringLtoRCreate("00000", "ISO8859-1"));               n++;
     XtSetArg(args[n], XmNrecomputeSize,    FALSE);                    n++;
     XtManageChild(levv=XmCreateLabelGadget(scored, "levv", args, n));
     
@@ -931,7 +937,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM);            n++;
     XtSetArg(args[n], XmNleftAttachment,   XmATTACH_FORM);            n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Lines:" , "ISO8859-1"));             n++;
+             XmStringLtoRCreate("Lines:", "ISO8859-1"));              n++;
     XtManageChild(linl=XmCreateLabelGadget(scored, "linl", args, n));
     
     n = 0;
@@ -943,7 +949,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNleftWidget,       linl);                     n++;
     XtSetArg(args[n], XmNleftOffset,       50);                       n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("00000" , "ISO8859-1"));              n++;
+             XmStringLtoRCreate("00000", "ISO8859-1"));               n++;
     XtSetArg(args[n], XmNrecomputeSize,    FALSE);                    n++;
     XtManageChild(linv=XmCreateLabelGadget(scored, "linv", args, n));
     
@@ -973,7 +979,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNtopAttachment,  XmATTACH_FORM);                n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);                n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Level" , "ISO8859-1"));                n++;
+             XmStringLtoRCreate("Level", "ISO8859-1"));                 n++;
     XtManageChild(levell=XmCreateLabelGadget(leveld, "levellabel", args, n));
     
     n = 0;
@@ -1031,7 +1037,7 @@ int main(int   argc,
         XtSetArg(args[n], XmNmarginRight,  0);                 n++;
         XtSetArg(args[n], XmNmarginBottom, 0);                 n++;
         XtSetArg(args[n], XmNmarginTop,    0);                 n++;
-        cb_level[0].closure = (char *)i;
+        cb_level[0].closure = (XtPointer)(unsigned long)i;
         XtSetArg(args[n], XmNvalueChangedCallback, cb_level);  n++;
         XtManageChild(level_btn[i] =
                       XmCreateToggleButton(levelm, "Lbtn", args, n));
@@ -1045,7 +1051,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNtopWidget,      levelm);          n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);   n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Height" , "ISO8859-1"));  n++;
+             XmStringLtoRCreate("Height", "ISO8859-1"));   n++;
     XtManageChild(heightl = XmCreateLabelGadget(leveld, "heightlabel",
                                                 args, n));
     
@@ -1097,7 +1103,7 @@ int main(int   argc,
         XtSetArg(args[n], XmNmarginRight,  0);                 n++;
         XtSetArg(args[n], XmNmarginBottom, 0);                 n++;
         XtSetArg(args[n], XmNmarginTop,    0);                 n++;
-        cb_height[0].closure = (char *)i;
+        cb_height[0].closure = (XtPointer)(unsigned long)i;
         XtSetArg(args[n], XmNvalueChangedCallback, cb_height); n++;
         XtManageChild(height_btn[i] =
                       XmCreateToggleButton(heightm, "Hbtn", args, n));
@@ -1110,7 +1116,7 @@ int main(int   argc,
     cb_lsetupok[0].closure = (char *)TRUE;
     XtSetArg(args[n], XmNactivateCallback, cb_lsetupok);       n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Start" , "ISO8859-1"));       n++;
+             XmStringLtoRCreate("Start", "ISO8859-1"));        n++;
     XtManageChild(lok = XmCreatePushButton(leveld, "Ok", args, n));
     
     
@@ -1123,7 +1129,7 @@ int main(int   argc,
     cb_lsetupok[0].closure = (char *)FALSE;
     XtSetArg(args[n], XmNactivateCallback, cb_lsetupok);       n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Cancel" , "ISO8859-1"));      n++;
+             XmStringLtoRCreate("Cancel", "ISO8859-1"));       n++;
     XtManageChild(lcan = XmCreatePushButton(leveld, "Cancel", args, n));
     
     XtManageChild(levelm);
@@ -1161,7 +1167,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNleftAttachment,  XmATTACH_FORM);          n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);          n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("mtetris Ranking" , "ISO8859-1")); n++;
+             XmStringLtoRCreate("mtetris Ranking", "ISO8859-1"));  n++;
     XtManageChild(rankl = XmCreateLabelGadget(rankd, "rankl", args, n));
     
     n = 0;
@@ -1198,7 +1204,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNleftAttachment,  XmATTACH_FORM);       n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);       n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Comment Here" , "ISO8859-1")); n++;
+             XmStringLtoRCreate("Comment Here", "ISO8859-1"));  n++;
     XtManageChild(rcomment=XmCreateLabel(rankd, "rcomment", args, n));
     
     n = 0;
@@ -1206,7 +1212,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNtopWidget,         rcomment);        n++;
     XtSetArg(args[n], XmNleftAttachment,    XmATTACH_FORM);   n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Dismiss" , "ISO8859-1"));    n++;
+             XmStringLtoRCreate("Dismiss", "ISO8859-1"));     n++;
     XtSetArg(args[n], XmNborderWidth,      1); n++;
     XtSetArg(args[n], XmNactivateCallback, cb_dismscore);     n++;
     XtManageChild(rdismbtn = XmCreatePushButton(rankd, "fall", args, n));
@@ -1245,7 +1251,7 @@ int main(int   argc,
     XtSetArg(args[n], XmNleftAttachment,  XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Next" , "ISO8859-1"));   n++;
+             XmStringLtoRCreate("Next", "ISO8859-1"));    n++;
     XtManageChild(nextlab=XmCreateLabelGadget(nextd, "nextlab", args, n));
     
     n = 0;
@@ -1268,7 +1274,7 @@ int main(int   argc,
                            (unsigned int)help_height,
                            DefaultDepth(dpy, 0));
     XPutImage(dpy, helpix, DefaultGC(dpy, 0),
-              &helpimg, 0, 0, 0, 0, help_width , help_height);
+              &helpimg, 0, 0, 0, 0, help_width, help_height);
     
     n = 0;
     XtSetArg(args[n], XmNx,                170);         n++;
@@ -1298,11 +1304,11 @@ int main(int   argc,
     statd = XmCreateFormDialog(toplevel_widget, "Statistic",  args, n);
     
     n = 0;
-    XtSetArg(args[n], XmNtopAttachment,   XmATTACH_FORM);     n++;
+    XtSetArg(args[n], XmNtopAttachment,   XmATTACH_FORM);    n++;
     XtSetArg(args[n], XmNleftAttachment,  XmATTACH_FORM);    n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);    n++;
     XtSetArg(args[n], XmNlabelString,
-             XmStringLtoRCreate("Statistic" , "ISO8859-1")); n++;
+             XmStringLtoRCreate("Statistic", "ISO8859-1"));  n++;
     XtManageChild(stlab=XmCreateLabelGadget(statd, "stlab", args, n));
     
     for (i = 0; i < MAXP; i++) {
@@ -1319,7 +1325,7 @@ int main(int   argc,
         XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);            n++;
         XtSetArg(args[n], XmNleftOffset, RECTSIZE+20);                  n++;
         XtSetArg(args[n], XmNlabelString,
-                 XmStringLtoRCreate("00000" , "ISO8859-1"));            n++;
+                 XmStringLtoRCreate("00000", "ISO8859-1"));             n++;
         XtSetArg(args[n], XmNrecomputeSize,    FALSE);                  n++;
         XtManageChild(stval[i]=XmCreateLabelGadget(statd, "stv", args, n));
         
@@ -1606,7 +1612,7 @@ static void init_tetris(void)
     if (XtIsManaged(statd)) {
         for (i = 0; i < MAXP; i ++) {
             XtSetArg(args[0], XmNlabelString,
-                     XmStringLtoRCreate("    0" , "ISO8859-1"));
+                     XmStringLtoRCreate("    0", "ISO8859-1"));
             XtSetValues(stval[i], args, 1);
         }
     }
@@ -1650,8 +1656,10 @@ static void quit_proc(void)
 static void start_proc(void)
 {
     Arg     args[1];
+    /*
     int     n;
     Boolean set;
+     */
     
     XtSetArg(args[0], XmNsensitive, FALSE);
     XtSetValues(startbtn, args, 1);
@@ -1729,7 +1737,7 @@ static int drop(void)
     if (XtIsManaged(statd)) {
         sprintf (val, "%5d", statdata[cpiece].n);
         XtSetArg(args[0], XmNlabelString,
-                 XmStringLtoRCreate(val , "ISO8859-1"));
+                 XmStringLtoRCreate(val, "ISO8859-1"));
         XtSetValues(stval[cpiece], args, 1);
     }
     
@@ -2429,7 +2437,7 @@ static void fixed(void)
      */
     l = 0;
     for (pmy = cry/RECTSIZE, k = 0; k<pieces[cpiece].pheight[crdir];
-         k++ , pmy++)    {
+         k++, pmy++)    {
         filled = True;
         for (pmx = 0; pmx < pwidth; pmx++) {
             if (PMAP(pmx, pmy) == 0) {
@@ -2591,9 +2599,9 @@ static void levelbtn_proc(Widget               w,
                           int                  tag,
                           XmAnyCallbackStruct *reason)
 {
-    int     n;
+    /* int     n; */
     Arg     args[1];
-    Boolean set;
+    /* Boolean set; */
     
     XtUnmanageChild(leveld);
     
@@ -2676,7 +2684,7 @@ static void dispscore(struct score_rec *allrec,
                       int               cnt,
                       int               rank,
                       char              upped,
-                      char             first)
+                      char              first)
 {
     int     n, i, newy, rankofs;
     Arg     args[10];
@@ -2701,7 +2709,8 @@ static void dispscore(struct score_rec *allrec,
     rtimew = (Widget *)XtMalloc(sizeof(Widget) * cnt);
     rtimem = (Widget *)XtMalloc(sizeof(Widget) * cnt);
     rtimeo = (Widget *)XtMalloc(sizeof(Widget) * cnt);
-    
+
+    n = 0;
     nmember = cnt;
     for (i = 0; i < cnt; i++) {
         sprintf(cnvtmp, "%d", i+1);
@@ -2712,7 +2721,7 @@ static void dispscore(struct score_rec *allrec,
         XtSetArg(args[n], XmNalignment, XmALIGNMENT_END);             n++;
         XtSetArg(args[n], XmNwidth,     RANKWIDTH);                   n++;
         XtSetArg(args[n], XmNlabelString,
-                 XmStringLtoRCreate(cnvtmp , "ISO8859-1"));           n++;
+                 XmStringLtoRCreate(cnvtmp, "ISO8859-1"));            n++;
         XtManageChild(rrank[i]= XmCreateLabelGadget(rankdbox, "Rnak",
                                                     args, n));
         
@@ -2722,7 +2731,7 @@ static void dispscore(struct score_rec *allrec,
         XtSetArg(args[n], XmNalignment,  XmALIGNMENT_BEGINNING);      n++;
         XtSetArg(args[n], XmNwidth,      NAMEWIDTH);                  n++;
         XtSetArg(args[n], XmNlabelString,
-                 XmStringLtoRCreate(allrec[i].user , "ISO8859-1"));   n++;
+                 XmStringLtoRCreate(allrec[i].user, "ISO8859-1"));    n++;
         XtManageChild(rname[i]=
                       XmCreateLabel(rankdbox, "names", args, n));
         
@@ -2733,7 +2742,7 @@ static void dispscore(struct score_rec *allrec,
         XtSetArg(args[n], XmNalignment,  XmALIGNMENT_END);            n++;
         XtSetArg(args[n], XmNwidth,      SCOREWIDTH);                 n++;
         XtSetArg(args[n], XmNlabelString, 
-                 XmStringLtoRCreate(cnvtmp , "ISO8859-1"));           n++;
+                 XmStringLtoRCreate(cnvtmp, "ISO8859-1"));            n++;
         XtManageChild(rscore[i]=
                       XmCreateLabelGadget(rankdbox, "score", args, n));
         
@@ -2744,11 +2753,11 @@ static void dispscore(struct score_rec *allrec,
         XtSetArg(args[n], XmNalignment,  XmALIGNMENT_BEGINNING);      n++;
         XtSetArg(args[n], XmNwidth,      LEVELWIDTH);                 n++;
         XtSetArg(args[n], XmNlabelString, 
-                 XmStringLtoRCreate(cnvtmp , "ISO8859-1"));           n++;
+                 XmStringLtoRCreate(cnvtmp, "ISO8859-1"));            n++;
         XtManageChild(rlevel[i]=
                       XmCreateLabelGadget(rankdbox, "level", args, n));
         
-        strcpy(&timestrbuf, ctime (&allrec[i].time));
+        strcpy((char *)&timestrbuf, ctime(&allrec[i].time));
         timestrbuf.tnull[0] = timestrbuf.mnull = timestrbuf.wnull = 0;
         
         n = 0;
@@ -2756,7 +2765,7 @@ static void dispscore(struct score_rec *allrec,
         XtSetArg(args[n], XmNx,          SCOREWEEK);                  n++;
         XtSetArg(args[n], XmNalignment,  XmALIGNMENT_BEGINNING);      n++;
         XtSetArg(args[n], XmNlabelString, 
-                 XmStringLtoRCreate(timestrbuf.timew , "ISO8859-1")); n++;
+                 XmStringLtoRCreate(timestrbuf.timew, "ISO8859-1"));  n++;
         XtManageChild(rtimew[i]=
                       XmCreateLabelGadget(rankdbox, "timew", args, n));
         
@@ -2765,7 +2774,7 @@ static void dispscore(struct score_rec *allrec,
         XtSetArg(args[n], XmNx,           SCOREMONTH);                n++;
         XtSetArg(args[n], XmNalignment,   XmALIGNMENT_BEGINNING);     n++;
         XtSetArg(args[n], XmNlabelString, 
-                 XmStringLtoRCreate(timestrbuf.timem , "ISO8859-1")); n++;
+                 XmStringLtoRCreate(timestrbuf.timem, "ISO8859-1"));  n++;
         XtManageChild(rtimem[i] = XmCreateLabelGadget(rankdbox, "timem",
                                                       args, n));
         
@@ -2774,7 +2783,7 @@ static void dispscore(struct score_rec *allrec,
         XtSetArg(args[n], XmNx,           SCORETIME);                 n++;
         XtSetArg(args[n], XmNalignment,   XmALIGNMENT_BEGINNING);     n++;
         XtSetArg(args[n], XmNlabelString, 
-                 XmStringLtoRCreate(timestrbuf.timeo , "ISO8859-1")); n++;
+                 XmStringLtoRCreate(timestrbuf.timeo, "ISO8859-1"));  n++;
         XtManageChild(rtimeo[i] = XmCreateLabelGadget(rankdbox, "timeo",
                                                       args, n));
     }
@@ -2794,7 +2803,7 @@ static void dispscore(struct score_rec *allrec,
     
     XtUnmanageChild(herepic);
     sprintf(cnvtmp, "%d", rank+1);
-    rankofs = RANKWIDTH - XTextWidth(owindow_font, cnvtmp, strlen(cnvtmp)) - 3;
+    rankofs = RANKWIDTH - XTextWidth(owindow_font, cnvtmp, (int)strlen(cnvtmp)) - 3;
     XtSetArg(args[1], XmNx, rankofs);
     
     if (upped) {
@@ -2803,14 +2812,14 @@ static void dispscore(struct score_rec *allrec,
         XtSetValues(herepic, args, 3);
         if (first) {
             XtSetArg(args[0], XmNlabelString, 
-                     XmStringLtoRCreate("Welcome to mtetris.\nHere is your first score." , "ISO8859-1"));
+                     XmStringLtoRCreate("Welcome to mtetris.\nHere is your first score.", "ISO8859-1"));
         } else {
             if (rank == 0) {
                 XtSetArg(args[0], XmNlabelString, 
-                         XmStringLtoRCreate("YOU ARE TOP !" , "ISO8859-1"));
+                         XmStringLtoRCreate("YOU ARE TOP !", "ISO8859-1"));
             } else {
                 XtSetArg(args[0], XmNlabelString, 
-                         XmStringLtoRCreate("Congratulations!\nYour rank upped." , "ISO8859-1"));
+                         XmStringLtoRCreate("Congratulations!\nYour rank upped.", "ISO8859-1"));
             }
         }
         XtSetValues(rcomment, args, 1);
@@ -2821,7 +2830,7 @@ static void dispscore(struct score_rec *allrec,
         sprintf(comment, 
                 "Your best score is here.\nYour score is %d.\nTry again!", score);
         XtSetArg(args[0], XmNlabelString, 
-                 XmStringLtoRCreate(comment , "ISO8859-1"));
+                 XmStringLtoRCreate(comment, "ISO8859-1"));
         XtSetValues(rcomment, args, 1);
     }
     XtManageChild(herepic);
@@ -2958,7 +2967,7 @@ static void size_proc(void)
         cb_btn[0].closure = (char *)TRUE; 
         XtSetArg(args[n], XmNactivateCallback, cb_btn);             n++;
         XtSetArg(args[n], XmNlabelString, 
-                 XmStringLtoRCreate("Ok" , "ISO8859-1"));           n++;
+                 XmStringLtoRCreate("Ok", "ISO8859-1"));            n++;
         XtManageChild(sokbtn = XmCreatePushButton(sizepd, "Ok", args, n));
         
         n = 0;
@@ -2967,7 +2976,7 @@ static void size_proc(void)
         cb_btn[0].closure = (char *)FALSE;
         XtSetArg(args[n], XmNactivateCallback, cb_btn);             n++;
         XtSetArg(args[n], XmNlabelString, 
-                 XmStringLtoRCreate("Cancel" , "ISO8859-1"));       n++;
+                 XmStringLtoRCreate("Cancel", "ISO8859-1"));        n++;
         XtManageChild(scanbtn = XmCreatePushButton(sizepd, "Can", args, n));
         XtSetArg(args[0], XmNdefaultButton, sokbtn);
         XtSetValues(sizepd, args, 1);
@@ -3008,9 +3017,8 @@ static void sizebtn_proc(Widget               w,
 {
     int n;
     Arg args[10];
-    static XtCallbackRec
-    cb_confok[]  = {{resize_proc, NULL}, {NULL, NULL}}, 
-    cb_confcan[] = {{resize_proc, NULL}, {NULL, NULL}};
+    static XtCallbackRec cb_confok[]  = {{resize_proc, NULL}, {NULL, NULL}},
+                         cb_confcan[] = {{resize_proc, NULL}, {NULL, NULL}};
     
     if (XtIsManaged(sizepd)) {
         XtUnmanageChild(sizepd);
@@ -3024,9 +3032,9 @@ static void sizebtn_proc(Widget               w,
         if (rsc == NULL) {
             n = 0;
             XtSetArg(args[n], XmNmessageString, 
-                     XmStringLtoRCreate(RESIZENOTICE , "ISO8859-1"));        n++;
+                     XmStringLtoRCreate(RESIZENOTICE, "ISO8859-1"));         n++;
             XtSetArg(args[n], XmNokLabelString, 
-                     XmStringLtoRCreate("Ok" , "ISO8859-1"));                n++;
+                     XmStringLtoRCreate("Ok", "ISO8859-1"));                 n++;
             XtSetArg(args[n], XmNdefaultButtonType, XmDIALOG_CANCEL_BUTTON); n++;
             cb_confok[0].closure = (char *)TRUE;
             XtSetArg(args[n], XmNokCallback,      cb_confok);                n++;
@@ -3043,7 +3051,7 @@ static void sizebtn_proc(Widget               w,
         if (rsc == NULL) {
             return;
         }
-        XtCallCallbacks(rsc, XmNokCallback, True);
+        XtCallCallbacks(rsc, XmNokCallback, (XtPointer)True);
     }
 }
 
@@ -3197,7 +3205,7 @@ static void about_proc(Widget               w,
                 n = 0;
                 XtSetArg(args[n], XmNdefaultPosition, TRUE);              n++;
                 XtSetArg(args[n], XmNmessageString, 
-                         XmStringLtoRCreate(ABOUTTXT , "ISO8859-1"));     n++;
+                         XmStringLtoRCreate(ABOUTTXT, "ISO8859-1"));      n++;
                 XtSetArg(args[n], XmNlabelFontList, abfont);              n++;
                 XtSetArg(args[n], XmNdialogTitle, 
                          XmStringLtoRCreate("About . . .", "ISO8859-1")); n++;
@@ -3233,10 +3241,8 @@ static void about_proc(Widget               w,
                 XtSetArg(args[n], XmNrightAttachment,  XmATTACH_NONE);      n++;
                 XtSetArg(args[n], XmNactivateCallback, cb_hidemore);        n++;
                 XtSetArg(args[n], XmNlabelString, 
-                         XmStringLtoRCreate("Acknowledged" , "ISO8859-1")); n++;
+                         XmStringLtoRCreate("Acknowledged", "ISO8859-1"));  n++;
                 XtManageChild(maboutb = XmCreatePushButton(maboutd, "Ack", args, n));
-                
-                
                 
                 n = 0;
                 XtSetArg(args[n], XmNvalue,                 MOREABOUT);         n++;
@@ -3268,7 +3274,9 @@ static void about_proc(Widget               w,
 }
 
 
-static void hidemore_proc(void)
+static void hidemore_proc(Widget    w,
+                          XtPointer closure,
+                          XtPointer call_data)
 {
     if (XtIsManaged(maboutd)) {
         XtUnmanageChild(maboutd);
@@ -3345,7 +3353,7 @@ static void window_proc(Widget                        w,
                     for (i = 0; i < MAXP; i ++)    {
                         sprintf (val, "%5d", statdata[i].n);
                         XtSetArg(args[0], XmNlabelString, 
-                                 XmStringLtoRCreate(val , "ISO8859-1"));
+                                 XmStringLtoRCreate(val, "ISO8859-1"));
                         XtSetValues(stval[i], args, 1);
                     }
                     XtManageChild(statd);
@@ -3385,8 +3393,8 @@ static void Eventproc(Widget     w,
                       XEvent    *event,
                       Boolean   *continue_to_dispatch_return)
 {
-    char *tag = (char *)client_data;
-    Opaque  kbid;
+    /* char *tag = (char *)client_data; */
+    Opaque  kbid = NULL;
     
     switch (event->type) {
         case ButtonPress:
@@ -3425,7 +3433,7 @@ static void Eventproc(Widget     w,
             break;
         case KeyPress:
             kbid = NULL;
-            switch (XLookupKeysym(event, 0)) {
+            switch (XLookupKeysym((XKeyEvent *)event, 0)) {
                 case XK_KP_4:
                 case XK_Left:
                 case XK_h:
@@ -3508,7 +3516,7 @@ static void Eventproc2(Widget     w,
                        XEvent    *event,
                        Boolean   *continue_to_dispatch_return)
 {
-    char *tag = (char *)client_data;
+    /* char *tag = (char *)client_data; */
     switch (event->type) {
         case EnterNotify:
             if (playing) {
@@ -3610,20 +3618,20 @@ static void upscore(int mask)
     if ((mask & SCOREUP) != 0) {
         sprintf(val, "%5d", score);
         XtSetArg(args[0], XmNlabelString,
-                 XmStringLtoRCreate(val , "ISO8859-1"));
+                 XmStringLtoRCreate(val, "ISO8859-1"));
         XtSetValues(scv, args, 1);
     }
     
     if ((mask & LEVELUP) != 0) {
         sprintf(val, "%5d", level);
         XtSetArg(args[0], XmNlabelString, 
-                 XmStringLtoRCreate(val , "ISO8859-1"));
+                 XmStringLtoRCreate(val, "ISO8859-1"));
         XtSetValues(levv, args, 1);
     }
     if ((mask & LINEUP) != 0) {
         sprintf(val, "%5d", sline);
         XtSetArg(args[0], XmNlabelString, 
-                 XmStringLtoRCreate(val , "ISO8859-1"));
+                 XmStringLtoRCreate(val, "ISO8859-1"));
         XtSetValues(linv, args, 1);
     }
 }

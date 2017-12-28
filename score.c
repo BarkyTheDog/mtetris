@@ -18,7 +18,11 @@
 int scorefile(char *name,
               int   score,
               int   level,
-              void  (*dispproc)())
+              void  (*dispproc)(struct score_rec *allrec,
+                                int               cnt,
+                                int               rank,
+                                char              upped,
+                                char              first))
 {
     int              i, j, retry, savmask;
     char             fname[MAXFNAM], *path, found;
