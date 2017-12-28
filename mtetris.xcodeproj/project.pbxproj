@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		662E25031BC09C9800AF7632 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 662E25011BC09C9800AF7632 /* score.c */; };
+		6618DF121FF55F5500B649DB /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 6618DF0E1FF55F5500B649DB /* main.c */; };
+		6618DF131FF55F5500B649DB /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 6618DF0F1FF55F5500B649DB /* score.c */; };
 		662E25061BC09CE900AF7632 /* libXext.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25051BC09CE900AF7632 /* libXext.a */; };
 		662E25081BC09CF300AF7632 /* libXm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25071BC09CF300AF7632 /* libXm.a */; };
 		662E250A1BC09CFD00AF7632 /* libXt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E25091BC09CFD00AF7632 /* libXt.a */; };
 		662E250C1BC09D0700AF7632 /* libX11.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 662E250B1BC09D0700AF7632 /* libX11.a */; };
-		662E250E1BC09D4700AF7632 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 662E250D1BC09D4700AF7632 /* main.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,15 +28,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6618DF0D1FF55F5500B649DB /* about.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = about.h; sourceTree = "<group>"; };
+		6618DF0E1FF55F5500B649DB /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		6618DF0F1FF55F5500B649DB /* score.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = score.c; sourceTree = "<group>"; };
+		6618DF101FF55F5500B649DB /* score.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = score.h; sourceTree = "<group>"; };
 		662E24F61BC09C5900AF7632 /* mtetris */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mtetris; sourceTree = BUILT_PRODUCTS_DIR; };
-		662E25001BC09C9800AF7632 /* about.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = about.h; sourceTree = SOURCE_ROOT; };
-		662E25011BC09C9800AF7632 /* score.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = score.c; sourceTree = SOURCE_ROOT; };
-		662E25021BC09C9800AF7632 /* score.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = score.h; sourceTree = SOURCE_ROOT; };
 		662E25051BC09CE900AF7632 /* libXext.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXext.a; path = ../../../../opt/local/lib/libXext.a; sourceTree = "<group>"; };
 		662E25071BC09CF300AF7632 /* libXm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXm.a; path = ../../../../opt/local/lib/libXm.a; sourceTree = "<group>"; };
 		662E25091BC09CFD00AF7632 /* libXt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXt.a; path = ../../../../opt/local/lib/libXt.a; sourceTree = "<group>"; };
 		662E250B1BC09D0700AF7632 /* libX11.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libX11.a; path = ../../../../opt/local/lib/libX11.a; sourceTree = "<group>"; };
-		662E250D1BC09D4700AF7632 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,11 +54,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6618DF0C1FF55F3800B649DB /* mtetris */ = {
+			isa = PBXGroup;
+			children = (
+				6618DF0D1FF55F5500B649DB /* about.h */,
+				6618DF0E1FF55F5500B649DB /* main.c */,
+				6618DF0F1FF55F5500B649DB /* score.c */,
+				6618DF101FF55F5500B649DB /* score.h */,
+			);
+			name = mtetris;
+			sourceTree = "<group>";
+		};
 		662E24ED1BC09C5900AF7632 = {
 			isa = PBXGroup;
 			children = (
+				6618DF0C1FF55F3800B649DB /* mtetris */,
 				662E25041BC09CD800AF7632 /* Libraries */,
-				662E24F81BC09C5900AF7632 /* mtetris */,
 				662E24F71BC09C5900AF7632 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,17 +80,6 @@
 				662E24F61BC09C5900AF7632 /* mtetris */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		662E24F81BC09C5900AF7632 /* mtetris */ = {
-			isa = PBXGroup;
-			children = (
-				662E25001BC09C9800AF7632 /* about.h */,
-				662E250D1BC09D4700AF7632 /* main.c */,
-				662E25011BC09C9800AF7632 /* score.c */,
-				662E25021BC09C9800AF7632 /* score.h */,
-			);
-			path = mtetris;
 			sourceTree = "<group>";
 		};
 		662E25041BC09CD800AF7632 /* Libraries */ = {
@@ -149,8 +149,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				662E250E1BC09D4700AF7632 /* main.c in Sources */,
-				662E25031BC09C9800AF7632 /* score.c in Sources */,
+				6618DF131FF55F5500B649DB /* score.c in Sources */,
+				6618DF121FF55F5500B649DB /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,7 +193,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /opt/local/include;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -230,7 +230,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /opt/local/include;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
