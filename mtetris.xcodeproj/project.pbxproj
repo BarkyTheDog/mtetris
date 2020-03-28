@@ -119,7 +119,7 @@
 		662E24EE1BC09C5900AF7632 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "CodeFromAbove, LLC";
 				TargetAttributes = {
 					662E24F51BC09C5900AF7632 = {
@@ -262,6 +262,7 @@
 		662E24FE1BC09C5900AF7632 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
@@ -273,6 +274,7 @@
 		662E24FF1BC09C5900AF7632 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
