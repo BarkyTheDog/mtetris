@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
@@ -672,21 +673,21 @@ int main(int   argc,
     int     i, j, k, l, n, x, y;
     Arg     args[20];
     Widget  cpull_down, centry;
-    static XtCallbackRec cb_expose[]     = {{expose_proc, NULL},     {NULL, NULL}},
-                         cb_exposen[]    = {{exposenext_proc, NULL}, {NULL, NULL}},
-                         cb_about[]      = {{about_proc, NULL},      {NULL, NULL}},
-                         cb_quit[]       = {{quit_proc, NULL},       {NULL, NULL}},
-                         cb_size[]       = {{size_proc, NULL},       {NULL, NULL}},
-                         cb_fall[]       = {{fallbtn_proc, NULL},    {NULL, NULL}},
-                         cb_sound[]      = {{soundsw_proc, NULL},    {NULL, NULL}},
-                         cb_window[]     = {{window_proc, NULL},     {NULL, NULL}},
-                         cb_start[]      = {{start_proc, NULL},      {NULL, NULL}},
-                         cb_levelsetup[] = {{levelsetup_proc, NULL}, {NULL, NULL}},
-                         cb_level[]      = {{level_proc, NULL},      {NULL, NULL}},
-                         cb_height[]     = {{height_proc, NULL},     {NULL, NULL}},
-                         cb_lsetupok[]   = {{levelbtn_proc, NULL},   {NULL, NULL}},
-                         cb_scroll[]     = {{scroll_proc, NULL},     {NULL, NULL}},
-                         cb_dismscore[]  = {{hidescore_proc, NULL}, {NULL, NULL}};
+    static XtCallbackRec cb_expose[]     = {{(XtCallbackProc)expose_proc, NULL},     {NULL, NULL}},
+                         cb_exposen[]    = {{(XtCallbackProc)exposenext_proc, NULL}, {NULL, NULL}},
+                         cb_about[]      = {{(XtCallbackProc)about_proc, NULL},      {NULL, NULL}},
+                         cb_quit[]       = {{(XtCallbackProc)quit_proc, NULL},       {NULL, NULL}},
+                         cb_size[]       = {{(XtCallbackProc)size_proc, NULL},       {NULL, NULL}},
+                         cb_fall[]       = {{(XtCallbackProc)fallbtn_proc, NULL},    {NULL, NULL}},
+                         cb_sound[]      = {{(XtCallbackProc)soundsw_proc, NULL},    {NULL, NULL}},
+                         cb_window[]     = {{(XtCallbackProc)window_proc, NULL},     {NULL, NULL}},
+                         cb_start[]      = {{(XtCallbackProc)start_proc, NULL},      {NULL, NULL}},
+                         cb_levelsetup[] = {{(XtCallbackProc)levelsetup_proc, NULL}, {NULL, NULL}},
+                         cb_level[]      = {{(XtCallbackProc)level_proc, NULL},      {NULL, NULL}},
+                         cb_height[]     = {{(XtCallbackProc)height_proc, NULL},     {NULL, NULL}},
+                         cb_lsetupok[]   = {{(XtCallbackProc)levelbtn_proc, NULL},   {NULL, NULL}},
+                         cb_scroll[]     = {{(XtCallbackProc)scroll_proc, NULL},     {NULL, NULL}},
+                         cb_dismscore[]  = {{(XtCallbackProc)hidescore_proc, NULL}, {NULL, NULL}};
     
     Pixmap     ticon_pix, ticonify_pix;
     XGCValues  ogcv;
@@ -2649,7 +2650,8 @@ static void levelbtn_proc(Widget               w,
 static void scorefileupdate(void)
 {
     /*      char username[L_cuserid];*/
-    char username[256] = "Bob";
+    /* char username[256] = "Bob"; */
+    char *username = getlogin();
     
     if (!training) {
         /*    cuserid(username);*/
@@ -2909,8 +2911,8 @@ static void size_proc(void)
 {
     Arg                  args[10];
     int                  n;
-    static XtCallbackRec cb_val[] = {{sizechange_proc, NULL}, {NULL, NULL}},
-                         cb_btn[] = {{sizebtn_proc, NULL},    {NULL, NULL}};
+    static XtCallbackRec cb_val[] = {{(XtCallbackProc)sizechange_proc, NULL}, {NULL, NULL}},
+                         cb_btn[] = {{(XtCallbackProc)sizebtn_proc, NULL},    {NULL, NULL}};
     
     if (sizepd == NULL)    {
         n = 0;
@@ -3017,8 +3019,8 @@ static void sizebtn_proc(Widget               w,
 {
     int n;
     Arg args[10];
-    static XtCallbackRec cb_confok[]  = {{resize_proc, NULL}, {NULL, NULL}},
-                         cb_confcan[] = {{resize_proc, NULL}, {NULL, NULL}};
+    static XtCallbackRec cb_confok[]  = {{(XtCallbackProc)resize_proc, NULL}, {NULL, NULL}},
+                         cb_confcan[] = {{(XtCallbackProc)resize_proc, NULL}, {NULL, NULL}};
     
     if (XtIsManaged(sizepd)) {
         XtUnmanageChild(sizepd);
