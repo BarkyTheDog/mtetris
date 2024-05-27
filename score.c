@@ -7,6 +7,7 @@
 /*#include <malloc.h>*/
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "score.h"
 
@@ -30,6 +31,7 @@ int scorefile(char *name,
     size_t           readcnt;
     int              sfp;
     
+    bzero(fname, MAXFNAM);
     if ((path = getenv(SCOREPATH)) != NULL) {
         strcpy(fname, path);
         strcat(fname, "/");
@@ -37,14 +39,25 @@ int scorefile(char *name,
         strcpy(fname, "/tmp/mtetris_scores/");
     }
     
-    strcat(fname,  SCOREFILE);
+    struct stat st = {0};
+    if (stat(fname, &st) == -1) {
+        int result = mkdir(fname, 0777);
+        if (result == -1) {
+            printf("Scorefile directory \"%s\" creation failed: %d (%d: %s)\n", fname, result, errno, strerror(errno));
+            return FALSE;
+        }
+    }
+    
+    strcat(fname, SCOREFILE);
     myscore.score = score;
     myscore.level = level;
     time(&myscore.time);
+    bzero(myscore.user, 256);
     strcpy(myscore.user, name);
     retry = 0;
     savmask = umask((mode_t)011);
-    while ((sfp = open(fname, O_RDWR | O_CREAT ,  0777)) == -1)    {
+    while ((sfp = open(fname, O_RDWR | O_CREAT, 0666)) == -1)    {
+        printf("File open failed: %d (%d: %s)\n", sfp, errno, strerror(errno));
         sleep(1);
         if (retry++ > 10)
             return FALSE;
@@ -59,6 +72,7 @@ int scorefile(char *name,
         initrec.level = 0;
         initrec.score = 1;
         time( &initrec.time );
+        bzero(initrec.user, 256);
         strcpy(initrec.user, "mtetris");
         write(sfp, &initrec, sizeof(struct score_rec));
         write(sfp, &myscore, sizeof(struct score_rec));
