@@ -37,6 +37,22 @@
 		662E25071BC09CF300AF7632 /* libXm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXm.a; path = ../../../../opt/local/lib/libXm.a; sourceTree = "<group>"; };
 		662E25091BC09CFD00AF7632 /* libXt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXt.a; path = ../../../../opt/local/lib/libXt.a; sourceTree = "<group>"; };
 		662E250B1BC09D0700AF7632 /* libX11.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libX11.a; path = ../../../../opt/local/lib/libX11.a; sourceTree = "<group>"; };
+		66BEFE152E3E90360068FC0B /* barunit.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = barunit.bm; sourceTree = "<group>"; };
+		66BEFE162E3E90360068FC0B /* boxunit.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = boxunit.bm; sourceTree = "<group>"; };
+		66BEFE172E3E90360068FC0B /* fall.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = fall.bm; sourceTree = "<group>"; };
+		66BEFE182E3E90360068FC0B /* filler.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = filler.bm; sourceTree = "<group>"; };
+		66BEFE192E3E90360068FC0B /* funit.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = funit.bm; sourceTree = "<group>"; };
+		66BEFE1A2E3E90360068FC0B /* gameover.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = gameover.bm; sourceTree = "<group>"; };
+		66BEFE1B2E3E90360068FC0B /* help.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = help.bm; sourceTree = "<group>"; };
+		66BEFE1C2E3E90360068FC0B /* here.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = here.bm; sourceTree = "<group>"; };
+		66BEFE1D2E3E90360068FC0B /* levelbtn.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = levelbtn.bm; sourceTree = "<group>"; };
+		66BEFE1E2E3E90360068FC0B /* lunit.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = lunit.bm; sourceTree = "<group>"; };
+		66BEFE1F2E3E90360068FC0B /* punit.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = punit.bm; sourceTree = "<group>"; };
+		66BEFE202E3E90360068FC0B /* sunit.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = sunit.bm; sourceTree = "<group>"; };
+		66BEFE212E3E90360068FC0B /* ticon.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = ticon.bm; sourceTree = "<group>"; };
+		66BEFE222E3E90360068FC0B /* ticonify.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = ticonify.bm; sourceTree = "<group>"; };
+		66BEFE232E3E90360068FC0B /* tunit.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = tunit.bm; sourceTree = "<group>"; };
+		66BEFE242E3E90360068FC0B /* up.bm */ = {isa = PBXFileReference; lastKnownFileType = text; path = up.bm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +73,25 @@
 		6618DF0C1FF55F3800B649DB /* mtetris */ = {
 			isa = PBXGroup;
 			children = (
-				6618DF0D1FF55F5500B649DB /* about.h */,
+				66BEFE152E3E90360068FC0B /* barunit.bm */,
+				66BEFE162E3E90360068FC0B /* boxunit.bm */,
+				66BEFE172E3E90360068FC0B /* fall.bm */,
+				66BEFE182E3E90360068FC0B /* filler.bm */,
+				66BEFE192E3E90360068FC0B /* funit.bm */,
+				66BEFE1A2E3E90360068FC0B /* gameover.bm */,
+				66BEFE1B2E3E90360068FC0B /* help.bm */,
+				66BEFE1C2E3E90360068FC0B /* here.bm */,
+				66BEFE1D2E3E90360068FC0B /* levelbtn.bm */,
+				66BEFE1E2E3E90360068FC0B /* lunit.bm */,
+				66BEFE1F2E3E90360068FC0B /* punit.bm */,
+				66BEFE202E3E90360068FC0B /* sunit.bm */,
+				66BEFE212E3E90360068FC0B /* ticon.bm */,
+				66BEFE222E3E90360068FC0B /* ticonify.bm */,
+				66BEFE232E3E90360068FC0B /* tunit.bm */,
+				66BEFE242E3E90360068FC0B /* up.bm */,
 				6618DF0E1FF55F5500B649DB /* main.c */,
 				6618DF0F1FF55F5500B649DB /* score.c */,
+				6618DF0D1FF55F5500B649DB /* about.h */,
 				6618DF101FF55F5500B649DB /* score.h */,
 			);
 			name = mtetris;
